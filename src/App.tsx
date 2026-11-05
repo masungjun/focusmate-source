@@ -532,7 +532,15 @@ function LangToggle({
   return (
     <button
       className="lang-toggle"
-      onClick={() => setLang(lang === "ko" ? "en" : "ko")}
+      onClick={() => {
+        const next = lang === "ko" ? "en" : "ko"
+        try {
+          localStorage.setItem("study-ui-lang", next)
+        } catch {
+          // 저장이 안 되어도 이번 화면의 언어는 바꾼다
+        }
+        setLang(next)
+      }}
       aria-label={lang === "ko" ? "Switch to English" : "한국어로 전환"}
     >
       {lang === "ko" ? "EN" : "KO"}
@@ -1067,7 +1075,8 @@ function useModal(open: boolean, ref: React.RefObject<HTMLFormElement | null>, c
 function App() {
   const [lang, setLang] = useState<Lang>(() => {
     try {
-      return localStorage.getItem("study-lang") === "ko" ? "ko" : "en"
+      localStorage.removeItem("study-lang")
+      return localStorage.getItem("study-ui-lang") === "ko" ? "ko" : "en"
     } catch {
       return "en"
     }
@@ -1133,11 +1142,6 @@ function App() {
   })
 
   useEffect(() => {
-    try {
-      localStorage.setItem("study-lang", lang)
-    } catch {
-      // storage unavailable — keep in-memory language only
-    }
     document.documentElement.lang = lang
     document.title = lang === "ko" ? "focusmate — 스터디 플래너" : "focusmate — Study planner"
   }, [lang])
@@ -1353,7 +1357,7 @@ function App() {
 
   function exportBackup() {
     const data: Record<string, string> = {}
-    for (const key of ["study-tasks", "study-sessions", "study-month-goal", "study-nickname", "study-lang", "study-timer"]) {
+    for (const key of ["study-tasks", "study-sessions", "study-month-goal", "study-nickname", "study-ui-lang", "study-timer"]) {
       const value = localStorage.getItem(key)
       if (value !== null) data[key] = value
     }
