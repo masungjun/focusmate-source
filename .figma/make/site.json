@@ -1,0 +1,12 @@
+{
+  "description": "날짜별 공부 계획과 집중 타이머로 실제 공부 기록을 쌓는 스터디 플래너",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  },
+  "title": "focusmate — Study planner",
+  "language": "en"
+}
